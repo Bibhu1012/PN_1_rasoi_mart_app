@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// Import your home screen here
-import 'package:rasoimart/screens/Bottom_Tabs/Home/home_screen.dart';
+import 'package:rasoimart/screens/AddProfileScreen/AddProfileScreen.dart';
+// Import your new screens here
 
 class OtpVerificationScreen extends StatefulWidget {
   final String phoneNumber;
@@ -16,7 +16,7 @@ class OtpVerificationScreen extends StatefulWidget {
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   static const Color appBackgroundColor = Color(0xFFF1E4CE);
   static const Color appErrorColor = Color(0xFFDC2626);
-  static const Color appMainButtonColor = Color(0xFFDC2626); // Red from login
+  static const Color appMainButtonColor = Color(0xFFDC2626); 
   static const Color resendSmsColor = Color(0xFF4CAF50);
 
   bool isError = false; 
@@ -49,12 +49,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
-  // Temporary Navigation Function
-  void _navigateToHome() {
-    Navigator.pushAndRemoveUntil(
+  // UPDATED: Navigation Function to move to Profile Creation
+  void _navigateToProfileSetup() {
+    // We use pushReplacement so the user can't go back to the OTP screen after verifying
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-      (route) => false, // Clears the navigation stack
+      MaterialPageRoute(builder: (context) => const AddProfileScreen()),
     );
   }
 
@@ -85,7 +85,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView( // Added to prevent overflow with keyboard
+      body: SingleChildScrollView( 
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Column(
@@ -130,7 +130,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
               const SizedBox(height: 25),
 
-              // Resend Logic
               if (_timerSeconds > 0)
                 Text(
                   "Resend OTP in $_timerSeconds",
@@ -178,12 +177,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
               const SizedBox(height: 50),
 
-              // --- TEMPORARY CONTINUE BUTTON ---
+              // --- UPDATED CONTINUE BUTTON ---
               SizedBox(
                 width: double.infinity,
                 height: 55,
                 child: ElevatedButton(
-                  onPressed: _navigateToHome,
+                  onPressed: _navigateToProfileSetup, // Now points to Profile Setup
                   style: ElevatedButton.styleFrom(
                     backgroundColor: appMainButtonColor,
                     foregroundColor: Colors.white,

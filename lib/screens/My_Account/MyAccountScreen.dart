@@ -1,6 +1,8 @@
+import 'dart:io'; // Required for FileImage
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rasoimart/screens/AppStateManagment/app_state.dart';
+import 'package:rasoimart/screens/AppStateManagment/profile_state.dart'; // Import your ProfileState
 import 'package:rasoimart/screens/My_Account/Address/address_screen.dart';
 import 'package:rasoimart/screens/My_Account/Credit/credit_screen.dart';
 import 'package:rasoimart/screens/My_Account/Edit_profile/edit_profile_screen.dart';
@@ -12,8 +14,6 @@ import 'package:rasoimart/screens/My_Account/Saved_Payments/saved_payments_scree
 import 'package:rasoimart/screens/My_Account/Support/help_support_screen.dart';
 import 'package:rasoimart/screens/My_Account/Update_Profile/update_profile_screen.dart';
 import 'package:rasoimart/screens/My_Account/language/language_screen.dart';
-import 'package:rasoimart/screens/Bottom_Tabs/Order_History/order_history_screen.dart';
-// import 'package:rasoimart/screens/My_Account/language_screen.dart';
 import 'app_state.dart';
 
 class MyAccountScreen extends StatefulWidget {
@@ -24,11 +24,7 @@ class MyAccountScreen extends StatefulWidget {
 }
 
 class _MyAccountScreenState extends State<MyAccountScreen> {
-  Map<String, String> userData = {
-    'name': 'BIBHANSHU GUPTA',
-    'phone': '9939963986',
-    'email': 'bgupta535@hotmail.com',
-  };
+  // Removed static userData as we now pull from ProfileState
 
   String creditStatus = 'active'; 
   double creditLimit = 20000.0;
@@ -73,12 +69,6 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                       words['orders'] ?? "Orders", 
                       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderScreen()))
                     ),
-//                     _quickActionItem(
-//   Icons.assignment_outlined, 
-//   words['orders'] ?? "Orders", 
-//   // Update the class name to OrderHistoryScreen
-//   () => Navigator.push(context, MaterialPageRoute(builder: (context) => const OrderHistoryScreen()))
-// ),
                     _quickActionItem(
                       Icons.credit_card, 
                       creditStatus == 'active' ? "₹${creditLimit.toInt()}" : "Credit", 
@@ -106,7 +96,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                 _buildInfoLink("Terms & Conditions"),
                 _buildInfoLink("Privacy Policy"),
                 const SizedBox(height: 40),
-                _buildFooter(), // Updated footer with custom colors
+                _buildFooter(),
                 const SizedBox(height: 20),
               ],
             ),
@@ -123,64 +113,70 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   }
 
   Widget _buildProfileCard(BuildContext context) {
-  // Wrap everything in the builder to "listen" for global state changes
-  return ValueListenableBuilder<Map<String, String>>(
-    valueListenable: userProfileNotifier,
-    builder: (context, profile, child) {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: cardColor, // Ensure cardColor is defined in your class
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: Colors.black12),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: const Icon(Icons.person, size: 30, color: Colors.black54),
+    // Note: If you want this screen to update instantly when a user changes their name in 'EditProfileScreen',
+    // you would use a ValueNotifier here too. For now, it pulls directly from ProfileState.
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(15),
+        border: Border.all(color: Colors.black12),
+      ),
+      child: Row(
+        children: [
+          // Profile Picture Logic
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(15),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Use 'profile' from the builder instead of 'userData'
-                  Text(
-                    profile['name'] ?? "User Name", 
-                    style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 16)
+            child: ProfileState.profileImage != null
+                ? CircleAvatar(
+                    radius: 30,
+                    backgroundImage: FileImage(ProfileState.profileImage!),
+                  )
+                : const CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.transparent,
+                    child: Icon(Icons.person, size: 40, color: Colors.black54),
                   ),
-                  Text(
-                    profile['phone'] ?? "Phone Number", 
-                    style: GoogleFonts.montserrat(fontSize: 12)
-                  ),
-                  Text(
-                    profile['email'] ?? "Email Address", 
-                    style: GoogleFonts.montserrat(fontSize: 12)
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  ProfileState.name.isNotEmpty ? ProfileState.name : "User Name", 
+                  style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 16)
+                ),
+                // Since Phone wasn't in the new AddProfileScreen, we leave it or hide it
+                Text(
+                  "Phone: 9939963986", // You can update this to ProfileState.phone if you add that field later
+                  style: GoogleFonts.montserrat(fontSize: 12)
+                ),
+                Text(
+                  ProfileState.email.isNotEmpty ? ProfileState.email : "Email Address", 
+                  style: GoogleFonts.montserrat(fontSize: 12)
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.edit_note, size: 28),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const EditProfileScreen()),
-                );
-              },
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit_note, size: 28),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EditProfileScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _quickActionItem(IconData icon, String label, VoidCallback onTap) {
     return GestureDetector(
@@ -233,7 +229,6 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           label: const Icon(Icons.logout, color: Colors.blue),
         ),
         const SizedBox(height: 20),
-        // Social Media Icons
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -245,7 +240,6 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
           ],
         ),
         const SizedBox(height: 20),
-        // Logo with RM prefix
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

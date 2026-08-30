@@ -51,47 +51,51 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
-              
+              const SizedBox(height: 20),
+
               // 1. App Name
               Text(
                 'Rasoi Mart',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.alegreya(
-                  fontSize: 36,
+                  fontSize: 30,
                   fontWeight: FontWeight.w900,
                   color: Colors.black,
                   height: 1.1,
                 ),
               ),
-              
+
               // 2. Tagline
               Text(
                 'Taste the Best At Your Home',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.dancingScript(
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: Colors.black,
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              
-              const SizedBox(height: 40),
-              
+
+              const SizedBox(height: 20),
+
               // 3. Central Logo
               Center(
                 child: Image.asset(
                   'assets/images/rasoi_mart_logo.png',
-                  width: 130,
-                  height: 130,
+                  width: 110,
+                  height: 110,
                   fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.shopping_basket, size: 100, color: Colors.orange),
+                  errorBuilder: (context, error, stackTrace) => const Icon(
+                    Icons.shopping_basket,
+                    size: 100,
+                    color: Colors.orange,
+                  ),
                 ),
               ),
-              
-              const SizedBox(height: 50),
-              
+
+              const SizedBox(height: 20),
+
               // 4. Header & Sub-header
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0),
@@ -101,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Your last minute App',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
-                        fontSize: 22,
+                        fontSize: 16,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
                       ),
@@ -111,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Login or Sign up',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.montserrat(
-                        fontSize: 16,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: Colors.grey.shade600,
                       ),
@@ -119,14 +123,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              
-              const SizedBox(height: 35),
-              
+
+              const SizedBox(height: 20),
+
               // 5. Phone Input Field (Wrapped in Container + Row for layout)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Container(
-                  height: 60,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(color: Colors.grey.shade300),
@@ -136,9 +140,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 12.0),
-                        child: Text("🇮🇳", style: TextStyle(fontSize: 20)),
+                        child: Text("🇮🇳", style: TextStyle(fontSize: 15)),
                       ),
-                      Container(width: 1, height: 35, color: Colors.grey.shade300),
+                      Container(
+                        width: 1,
+                        height: 35,
+                        color: Colors.grey.shade300,
+                      ),
                       Expanded(
                         child: TextField(
                           controller: _phoneController,
@@ -149,11 +157,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                           decoration: const InputDecoration(
                             hintText: 'Enter mobile number',
-                            hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 15,
+                            ),
                             prefixText: "+91 ",
-                            prefixStyle: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
+                            prefixStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                            ),
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 15,
+                            ),
                           ),
                         ),
                       ),
@@ -169,9 +186,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 55,
+                  height: 40,
                   child: ElevatedButton(
-                    onPressed: _isButtonActive 
+                    onPressed: _isButtonActive
                         ? () {
                             Navigator.push(
                               context,
@@ -181,10 +198,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             );
-                          } 
-                        : null, 
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _isButtonActive ? appMainButtonColor : Colors.grey.shade400,
+                      backgroundColor: _isButtonActive
+                          ? appMainButtonColor
+                          : Colors.grey.shade400,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       disabledBackgroundColor: Colors.grey.shade400,
@@ -195,22 +214,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'Send OTP',
                       style: GoogleFonts.montserrat(
-                        fontSize: 18,
+                        fontSize: 14,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                 ),
               ),
-              
-              const SizedBox(height: 30),
-              
+
+              const SizedBox(height: 15),
+
               // 7. OR Divider
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 60.0),
                 child: Row(
                   children: [
-                    const Expanded(child: Divider(color: Colors.black38, thickness: 1)),
+                    const Expanded(
+                      child: Divider(color: Colors.black38, thickness: 1),
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
@@ -222,56 +243,76 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const Expanded(child: Divider(color: Colors.black38, thickness: 1)),
+                    const Expanded(
+                      child: Divider(color: Colors.black38, thickness: 1),
+                    ),
                   ],
                 ),
               ),
-              
-              const SizedBox(height: 30),
-              
+
+              const SizedBox(height: 15),
+
               // 8. Social Sign-In Buttons
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Column(
                   children: [
                     SocialButton(
                       text: "Sign in with Google",
+                      fontSize: 12, // Decreased font size
                       color: appGoogleButtonColor,
                       textColor: Colors.white,
                       iconWidget: Container(
                         padding: const EdgeInsets.all(5),
                         child: Image.asset(
                           'assets/images/google_logo.png',
-                          height: 20,
-                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.g_mobiledata, color: Colors.blue),
+                          height: 14,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.g_mobiledata,
+                                color: Colors.blue,
+                                size: 18,
+                              ),
                         ),
                       ),
+                      // onPressed: () {
+                      //   // Add your Google Sign-In logic here
+                      // },
                     ),
                     const SizedBox(height: 15),
                     SocialButton(
                       text: "Sign in with Apple",
+                      fontSize: 12, // Decreased font size
                       color: Colors.black,
                       textColor: Colors.white,
                       iconWidget: Padding(
-                        padding: const EdgeInsets.only(left: 3),
+                        padding: const EdgeInsets.only(left: 4),
                         child: Image.asset(
                           'assets/images/apple_logo.png',
-                          height: 20,
-                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.g_mobiledata, color: Colors.blue),
+                          height: 14,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.apple,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                         ),
                       ),
+                      // onPressed: () {
+                      //   // Add your Apple Sign-In logic here
+                      // },
                     ),
                   ],
                 ),
               ),
-              
-              const SizedBox(height: 60), 
-              
+
+              const SizedBox(height: 40),
+
               // 9. Footer
               Container(
                 width: double.infinity,
                 color: appFooterColor,
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   children: [
                     Wrap(
@@ -279,14 +320,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text(
                           'By continuing, you agree to our: ',
-                          style: GoogleFonts.montserrat(fontSize: 12, color: Colors.grey.shade800),
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            color: Colors.grey.shade800,
+                          ),
                         ),
                         Text(
                           'Terms of Service',
                           style: GoogleFonts.montserrat(
-                            fontSize: 12, 
-                            color: Colors.grey.shade900, 
-                            decoration: TextDecoration.underline
+                            fontSize: 12,
+                            color: Colors.grey.shade900,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ],
@@ -295,13 +339,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     Wrap(
                       alignment: WrapAlignment.center,
                       children: [
-                        Text('& ', style: GoogleFonts.montserrat(fontSize: 12, color: Colors.grey.shade800)),
+                        Text(
+                          '& ',
+                          style: GoogleFonts.montserrat(
+                            fontSize: 12,
+                            color: Colors.grey.shade800,
+                          ),
+                        ),
                         Text(
                           'Privacy policy',
                           style: GoogleFonts.montserrat(
-                            fontSize: 12, 
-                            color: Colors.grey.shade900, 
-                            decoration: TextDecoration.underline
+                            fontSize: 12,
+                            color: Colors.grey.shade900,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
                       ],
@@ -322,6 +372,7 @@ class SocialButton extends StatelessWidget {
   final Color color;
   final Color textColor;
   final Widget iconWidget;
+  final double fontSize;
 
   const SocialButton({
     super.key,
@@ -329,6 +380,7 @@ class SocialButton extends StatelessWidget {
     required this.color,
     required this.textColor,
     required this.iconWidget,
+    this.fontSize = 14,
   });
 
   @override

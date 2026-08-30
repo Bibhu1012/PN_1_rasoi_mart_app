@@ -1,205 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rasoimart/screens/Bottom_Tabs/Category/All_Categoties/category_models.dart';
+import 'category_models.dart';
+import 'category_detail_screen.dart';
 
-class CategoryScreen extends StatefulWidget {
+class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
 
-  @override
-  State<CategoryScreen> createState() => _CategoryScreenState();
-}
-
-class _CategoryScreenState extends State<CategoryScreen> {
-  // Theme Colors
-  static const Color appBackgroundColor = Color(0xFFF1E4CE);
-  static const Color appOrange = Color(0xFFECA369);
-  static const Color appBrown = Colors.brown;
-
-  int _selectedCategoryIndex = 0;
-
-  // Mock Data for Categories
-  final List<Map<String, dynamic>> _categories = [
-    {'name': 'Spices & Masala', 'icon': Icons.waves},
-    {'name': 'Atta & Flours', 'icon': Icons.bakery_dining},
-    {'name': 'Rice & Grains', 'icon': Icons.grass},
-    {'name': 'Pulses & Dals', 'icon': Icons.grain},
-    {'name': 'Oil & Ghee', 'icon': Icons.opacity},
-    {'name': 'Salt & Sugar', 'icon': Icons.blur_on},
-    {'name': 'Dry Fruits', 'icon': Icons.eco},
-  ];
+  static const Color tileBackground = Color(0xFFF2F2F2);
 
   @override
-Widget build(BuildContext context) {
-  return Container(
-    color: appBackgroundColor,
-    child: Row(
-      children: [
-        // LEFT CATEGORY
-        _buildSideCategoryRail(),
-
-        // RIGHT PRODUCTS
-        Expanded(
-          child: _buildProductGrid(),
+  Widget build(BuildContext context) {
+    return Container(
+      color: Color(0xFFF1E4CE),
+      child: SafeArea(
+        bottom: false,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: _buildTopBar()),
+            ...CategoryData.sections.map(
+              (section) => SliverToBoxAdapter(child: _buildSection(context, section)),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 30)),
+          ],
         ),
-      ],
-    ),
-  );
-}
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0.5,
-      title: Text(
-        "Categories",
-        style: GoogleFonts.montserrat(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-      ),
-      actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.search, color: Colors.black)),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black)),
-      ],
-    );
-  }
-
-  Widget _buildSideCategoryRail() {
-    return Container(
-      width: 100,
-      color: Colors.white,
-      child: ListView.builder(
-        itemCount: _categories.length,
-        itemBuilder: (context, index) {
-          bool isSelected = _selectedCategoryIndex == index;
-          return GestureDetector(
-            onTap: () => setState(() => _selectedCategoryIndex = index),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
-              decoration: BoxDecoration(
-                color: isSelected ? appBackgroundColor : Colors.white,
-                border: Border(
-                  left: BorderSide(
-                    color: isSelected ? appOrange : Colors.transparent,
-                    width: 4,
-                  ),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Icon(
-                    _categories[index]['icon'],
-                    color: isSelected ? appBrown : Colors.grey,
-                    size: 24,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    _categories[index]['name'],
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.montserrat(
-                      fontSize: 10,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? appBrown : Colors.grey,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
       ),
     );
   }
 
-  Widget _buildProductGrid() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildTopBar() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Sub-header for the selected category
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                _categories[_selectedCategoryIndex]['name'],
-                style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              const Icon(Icons.tune, size: 18, color: appBrown), // Filter icon
-            ],
+          Text(
+            "Categories",
+            style: GoogleFonts.montserrat(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black87),
           ),
-          const SizedBox(height: 15),
-          
-          Expanded(
-            child: GridView.builder(
-              itemCount: 6, // Mock item count
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.7,
-                mainAxisSpacing: 12,
-                crossAxisSpacing: 12,
-              ),
-              itemBuilder: (context, index) {
-                return _buildProductCard();
-              },
-            ),
+          GestureDetector(
+            onTap: () {},
+            child: const Icon(Icons.search, size: 26, color: Colors.black87),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildProductCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5)],
-      ),
+  Widget _buildSection(BuildContext context, CategorySection section) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image Section
+          Text(
+            section.title,
+            style: GoogleFonts.montserrat(fontSize: 19, fontWeight: FontWeight.bold, color: Colors.black87),
+          ),
+          const SizedBox(height: 14),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: section.items.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 10,
+              childAspectRatio: 0.72,
+            ),
+            itemBuilder: (context, index) => _buildCategoryTile(context, section.items[index]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryTile(BuildContext context, MainCategoryItem item) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CategoryDetailScreen(category: item)),
+        );
+      },
+      child: Column(
+        children: [
           Expanded(
             child: Container(
-              margin: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: appBackgroundColor.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Center(child: Icon(Icons.image, color: Colors.grey)), // Placeholder
+              width: double.infinity,
+              decoration: BoxDecoration(color: tileBackground, borderRadius: BorderRadius.circular(14)),
+              child: Icon(item.icon, color: item.accentColor, size: 30),
             ),
           ),
-          
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Product Name",
-                  maxLines: 1,
-                  style: GoogleFonts.montserrat(fontSize: 12, fontWeight: FontWeight.w600),
-                ),
-                const Text("500g", style: TextStyle(fontSize: 10, color: Colors.grey)),
-                const SizedBox(height: 5),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "₹149",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: appBrown),
-                    ),
-                    // Add Button
-                    Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: appOrange,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Icon(Icons.add, color: Colors.white, size: 18),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-              ],
-            ),
+          const SizedBox(height: 6),
+          Text(
+            item.name,
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.montserrat(fontSize: 10.5, fontWeight: FontWeight.w600, color: Colors.black87, height: 1.2),
           ),
         ],
       ),
