@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rasoimart/screens/AppStateManagment/cart_state.dart';
 import 'package:rasoimart/screens/Bottom_Tabs/Category/All_Categoties/category_models.dart';
+import 'package:rasoimart/models/product_model.dart';
+import 'package:rasoimart/screens/ProductDetailScreen/product_detail_screen.dart';
 import 'category_models.dart';
 
 class CategoryDetailScreen extends StatefulWidget {
@@ -219,103 +221,115 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     final key = "${product.brand}_${product.name}";
     final int quantity = _quantities[key] ?? 0;
 
-    return Container(
-      width: 155,
-      margin: const EdgeInsets.only(right: 14),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: Colors.grey.shade200),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 3))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 110,
-                width: double.infinity,
-                decoration: BoxDecoration(color: const Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(10)),
-                child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 28)),
-              ),
-              Positioned(
-                top: 4,
-                left: 4,
-                child: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: BoxDecoration(border: Border.all(color: product.isVeg ? Colors.green : Colors.red, width: 1.2)),
-                  child: Icon(Icons.circle, size: 6, color: product.isVeg ? Colors.green : Colors.red),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(
+              product: Product.fromItem(product),
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: 155,
+        margin: const EdgeInsets.only(right: 14),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.grey.shade200),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 3))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  height: 110,
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: const Color(0xFFF7F7F7), borderRadius: BorderRadius.circular(10)),
+                  child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 28)),
                 ),
-              ),
-              Positioned(top: 2, right: 2, child: Icon(Icons.favorite_border, size: 16, color: Colors.grey.shade400)),
-              Positioned(
-                bottom: -8,
-                right: 4,
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() => _quantities[key] = quantity + 1);
-                    CartState.addToCart({
-                      'name': product.name,
-                      'qty': product.qty,
-                      'price': product.price.toString(),
-                      'old': product.oldPrice.toString(),
-                    });
-                  },
+                Positioned(
+                  top: 4,
+                  left: 4,
                   child: Container(
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: appOrange, width: 1.2),
-                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 4)],
-                    ),
-                    child: Icon(Icons.add, size: 14, color: appOrange),
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(border: Border.all(color: product.isVeg ? Colors.green : Colors.red, width: 1.2)),
+                    child: Icon(Icons.circle, size: 6, color: product.isVeg ? Colors.green : Colors.red),
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          if (product.discountPercent > 0)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              color: const Color(0xFFFFD814),
-              child: Text("${product.discountPercent}% OFF", style: GoogleFonts.montserrat(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.black87)),
+                Positioned(top: 2, right: 2, child: Icon(Icons.favorite_border, size: 16, color: Colors.grey.shade400)),
+                Positioned(
+                  bottom: -8,
+                  right: 4,
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => _quantities[key] = quantity + 1);
+                      CartState.addToCart({
+                        'name': product.name,
+                        'qty': product.qty,
+                        'price': product.price.toString(),
+                        'old': product.oldPrice.toString(),
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: appOrange, width: 1.2),
+                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 4)],
+                      ),
+                      child: Icon(Icons.add, size: 14, color: appOrange),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              Text("₹${product.price}", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14)),
-              const SizedBox(width: 5),
-              if (product.oldPrice > product.price)
-                Text("₹${product.oldPrice}", style: const TextStyle(fontSize: 10, decoration: TextDecoration.lineThrough, color: Colors.grey)),
-            ],
-          ),
-          Text(product.brand.toUpperCase(), style: GoogleFonts.montserrat(fontSize: 9, color: Colors.grey.shade600, fontWeight: FontWeight.w600)),
-          Text(
-            product.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.montserrat(fontSize: 11.5, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(height: 3),
-          Row(
-            children: [
-              Text(product.qty, style: GoogleFonts.montserrat(fontSize: 10.5, fontWeight: FontWeight.w700, color: const Color(0xFF3A6B4C))),
-              const Icon(Icons.keyboard_arrow_down, size: 14, color: Color(0xFF3A6B4C)),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              const Icon(Icons.bolt, size: 12, color: appOrange),
-              const SizedBox(width: 2),
-              Text(product.deliveryTime, style: GoogleFonts.montserrat(fontSize: 10, color: Colors.grey.shade600)),
-            ],
-          ),
-        ],
+            const SizedBox(height: 10),
+            if (product.discountPercent > 0)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                color: const Color(0xFFFFD814),
+                child: Text("${product.discountPercent}% OFF", style: GoogleFonts.montserrat(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.black87)),
+              ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Text("₹${product.price}", style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14)),
+                const SizedBox(width: 5),
+                if (product.oldPrice > product.price)
+                  Text("₹${product.oldPrice}", style: const TextStyle(fontSize: 10, decoration: TextDecoration.lineThrough, color: Colors.grey)),
+              ],
+            ),
+            Text(product.brand.toUpperCase(), style: GoogleFonts.montserrat(fontSize: 9, color: Colors.grey.shade600, fontWeight: FontWeight.w600)),
+            Text(
+              product.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.montserrat(fontSize: 11.5, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 3),
+            Row(
+              children: [
+                Text(product.qty, style: GoogleFonts.montserrat(fontSize: 10.5, fontWeight: FontWeight.w700, color: const Color(0xFF3A6B4C))),
+                const Icon(Icons.keyboard_arrow_down, size: 14, color: Color(0xFF3A6B4C)),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const Icon(Icons.bolt, size: 12, color: appOrange),
+                const SizedBox(width: 2),
+                Text(product.deliveryTime, style: GoogleFonts.montserrat(fontSize: 10, color: Colors.grey.shade600)),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

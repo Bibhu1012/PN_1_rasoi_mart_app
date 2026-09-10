@@ -8,7 +8,9 @@ import 'package:rasoimart/screens/Bottom_Tabs/Category/category_screen.dart';
 import 'package:rasoimart/screens/Bottom_Tabs/Order_History/order_history_screen.dart';
 import 'package:rasoimart/screens/List_upload/list_upload_screen.dart';
 import 'package:rasoimart/screens/My_Account/MyAccountScreen.dart';
+import 'package:rasoimart/models/product_model.dart';
 import 'package:rasoimart/screens/My_Cart/my_cart_screen.dart';
+import 'package:rasoimart/screens/ProductDetailScreen/product_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -582,104 +584,125 @@ class _HomeScreenState extends State<HomeScreen> {
     final int old = int.tryParse(product['old'] ?? '0') ?? 0;
     final int discount = old > price ? (((old - price) / old) * 100).round() : 0;
 
-    return Container(
-      width: 152,
-      margin: const EdgeInsets.only(right: 14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10, offset: const Offset(0, 4))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                height: 118,
-                width: double.infinity,
-                margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [appBackgroundColor.withOpacity(0.8), appBackgroundColor.withOpacity(0.3)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 30)),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailScreen(
+              product: Product.fromMap(
+                product,
+                description: "This is a premium quality ${product['name']} sourced from the best farms. It is fresh, organic and delivered straight to your doorstep.",
+                nutrition: [
+                  "100% Organic",
+                  "Freshly Sourced",
+                  "No Artificial Preservatives",
+                  "Eco-friendly Packaging",
+                ],
               ),
-              if (badgeText != null)
-                Positioned(
-                  top: 4,
-                  left: 4,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(color: appRed, borderRadius: BorderRadius.circular(6)),
-                    child: Text(badgeText, style: GoogleFonts.montserrat(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
-                  ),
-                )
-              else if (discount > 0)
-                Positioned(
-                  top: 4,
-                  left: 4,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(color: appRed, borderRadius: BorderRadius.circular(6)),
-                    child: Text("$discount% OFF", style: GoogleFonts.montserrat(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product['name']!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.montserrat(fontSize: 13, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 2),
-                Text(product['qty']!, style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Text(
-                      "₹${product['price']}",
-                      style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14, color: appBrown),
-                    ),
-                    if (discount > 0) ...[
-                      const SizedBox(width: 5),
-                      Text(
-                        "₹${product['old']}",
-                        style: const TextStyle(fontSize: 10, decoration: TextDecoration.lineThrough, color: Colors.grey),
-                      ),
-                    ],
-                  ],
-                ),
-                const SizedBox(height: 8),
-                SizedBox(
-                  width: double.infinity,
-                  height: 32,
-                  child: ElevatedButton(
-                    onPressed: () => CartState.addToCart(product),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: appOrange,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Text("ADD", style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                  ),
-                ),
-                const SizedBox(height: 10),
-              ],
             ),
           ),
-        ],
+        );
+      },
+      child: Container(
+        width: 152,
+        margin: const EdgeInsets.only(right: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 10, offset: const Offset(0, 4))],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                Container(
+                  height: 118,
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [appBackgroundColor.withOpacity(0.8), appBackgroundColor.withOpacity(0.3)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Center(child: Icon(Icons.image_outlined, color: Colors.grey, size: 30)),
+                ),
+                if (badgeText != null)
+                  Positioned(
+                    top: 4,
+                    left: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(color: appRed, borderRadius: BorderRadius.circular(6)),
+                      child: Text(badgeText, style: GoogleFonts.montserrat(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
+                    ),
+                  )
+                else if (discount > 0)
+                  Positioned(
+                    top: 4,
+                    left: 4,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                      decoration: BoxDecoration(color: appRed, borderRadius: BorderRadius.circular(6)),
+                      child: Text("$discount% OFF", style: GoogleFonts.montserrat(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product['name']!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.montserrat(fontSize: 13, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(product['qty']!, style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Text(
+                        "₹${product['price']}",
+                        style: GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 14, color: appBrown),
+                      ),
+                      if (discount > 0) ...[
+                        const SizedBox(width: 5),
+                        Text(
+                          "₹${product['old']}",
+                          style: const TextStyle(fontSize: 10, decoration: TextDecoration.lineThrough, color: Colors.grey),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 32,
+                    child: ElevatedButton(
+                      onPressed: () => CartState.addToCart(product),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: appOrange,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: Text("ADD", style: GoogleFonts.montserrat(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
